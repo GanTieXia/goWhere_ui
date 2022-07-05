@@ -169,10 +169,12 @@ export default {
       this.loading_email = true;
       sendCheckCode(this.registerForm.email).then(res => {
         console.log(res)
-        if(res.data.code == '200'){
+        if(res.data.code === '200'){
           modal.alertSuccess('验证码发送成功！')
-        } else if(res.data.code == '404'){
+        } else if(res.data.code === '404'){
           modal.alertWarning('已发送验证码，请勿重复发送！')
+        } else if (res.data.code === '405'){
+          modal.alertWarning('此邮箱已被绑定！')
         } else {
           modal.alertWarning('验证码发送失败，请重试或联系管理员！')
         }

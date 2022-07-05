@@ -59,3 +59,16 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+// 获取验证码
+export function sendCheckCode(email) {
+  return request({
+    url: '/auth/checkCode',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    timeout: 20000,
+    data: email
+  })
+}
