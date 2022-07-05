@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import {getCodeImg, register, sendCheckCode} from "@/api/login";
+import {checkCode, getCodeImg, register, sendCheckCode} from "@/api/login";
 import {MessageBox} from "element-ui";
 import modal from '@/plugins/modal'
 
@@ -161,14 +161,19 @@ export default {
   methods: {
     // 发送邮箱验证码
     sendCode(){
-      if(this.registerForm.email == null || this.registerForm.email === ''){
+      const email = this.registerForm.email;
+      let checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!checkEmail.test(email)) {
+        modal.alertWarning('邮箱格式错误！')
+        return;
+      }
+      if(email == null || email === ''){
         modal.alertWarning('请输入邮箱！')
         return
       }
       modal.loading('验证码发送中，请稍后...')
       this.loading_email = true;
-      sendCheckCode(this.registerForm.email).then(res => {
-        console.log(res)
+      sendCheckCode(email).then(res => {
         if(res.data.code === '200'){
           modal.alertSuccess('验证码发送成功！')
         } else if(res.data.code === '404'){
@@ -176,7 +181,7 @@ export default {
         } else if (res.data.code === '405'){
           modal.alertWarning('此邮箱已被绑定！')
         } else {
-          modal.alertWarning('验证码发送失败，请重试或联系管理员！')
+          modal.alertError('验证码发送失败，请重试或联系管理员！')
         }
         this.loading_email = false;
         modal.closeLoading();
@@ -197,7 +202,16 @@ export default {
         if (valid) {
           this.loading = true;
 
-          modal.notify('注册功能维护中，尽情期待！');
+          // 检验邮箱验证码
+          checkCode(this.registerForm.email,this.registerForm.emailCode).then(res => {
+            if(res.data.code === '404'){
+              modal.alertWarning('邮箱验证码错误！')
+              this.registerForm.emailCode = ''
+            } else {
+              modal.notify('注册功能维护中，尽情期待！');
+            }
+          })
+
           this.loading = false;
           return;
 

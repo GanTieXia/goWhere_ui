@@ -60,10 +60,10 @@ export function getCodeImg() {
   })
 }
 
-// 获取验证码
+// 发送验证码
 export function sendCheckCode(email) {
   return request({
-    url: '/auth/checkCode',
+    url: '/auth/sendCheckCode',
     headers: {
       isToken: false
     },
@@ -72,3 +72,17 @@ export function sendCheckCode(email) {
     data: email
   })
 }
+
+// 校验验证码
+export function checkCode(email,emailCode) {
+  return request({
+    url: '/auth/checkCode',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    timeout: 20000,
+    data: {email,emailCode}
+  })
+}
+
