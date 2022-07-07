@@ -207,14 +207,8 @@ export default {
             if(res.data.code === '404'){
               modal.alertWarning('邮箱验证码错误！')
               this.registerForm.emailCode = ''
-            } else {
-              modal.notify('注册功能维护中，尽情期待！');
             }
           })
-
-          this.loading = false;
-          return;
-
           register(this.registerForm).then(res => {
             const username = this.registerForm.username;
             this.$alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", '系统提示', {
