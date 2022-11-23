@@ -35,7 +35,10 @@ module.exports = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
+        // 开发环境后端地址
         target: `http://localhost:8080`,
+        // 测试环境后端地址
+        // target: `https://www.hailin.pro/prod-api`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
