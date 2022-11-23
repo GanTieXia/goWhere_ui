@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            访客
+            登录次数
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.sysLoginCounts" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -56,15 +56,29 @@
 </template>
 
 <script>
+import { countSysLogin } from "@/api/system/index";
 import CountTo from 'vue-count-to'
 
 export default {
   components: {
     CountTo
   },
+  data() {
+    return {
+      sysLoginCounts : 0
+    }
+  },
+  mounted() {
+    this.countSysLogin()
+  },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+    countSysLogin(){
+      countSysLogin().then(response => {
+        this.sysLoginCounts = Number(response.sysLogin);
+      });
     }
   }
 }
